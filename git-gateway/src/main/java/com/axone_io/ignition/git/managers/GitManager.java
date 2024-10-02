@@ -199,6 +199,7 @@ public class GitManager {
     }
 
     public static String getActor(String projectName, String path) {
+        logger.info(projectName + " " + path);
         ProjectManager projectManager = context.getProjectManager();
         RuntimeProject project = projectManager.getProject(projectName).get();
 
@@ -264,7 +265,11 @@ public class GitManager {
         if (paths.length > 0) moduleId = paths[0];
         if (paths.length > 1) typeId = paths[1];
         if (paths.length > 2) resource = resourcePath.replace(moduleId + "/" + typeId + "/", "");
-
+        logger.info(moduleId + " " + typeId + " " + resource);
+        ResourceType resourceType = new ResourceType(moduleId, typeId);
+        logger.info(resourceType.toString());
+        ResourcePath resourcePath1 = new ResourcePath(resourceType, resource);
+        logger.info(resourcePath1.toString());
         return new ResourcePath(new ResourceType(moduleId, typeId), resource);
     }
 
@@ -277,8 +282,7 @@ public class GitManager {
     public static boolean isUpdatedResource(String projectName, String resourcePath){
         boolean isUpdatedResource;
         Path projectPath = getProjectFolderPath(projectName);
-        String filePath = projectPath.toAbsolutePath() + "\\" +resourcePath.replace("/", "\\");
-
+        String filePath = projectPath.toAbsolutePath() + "/" +resourcePath;
         try (Repository repository = getGit(projectPath).getRepository()) {
 
             // Get the ObjectId of the latest commit

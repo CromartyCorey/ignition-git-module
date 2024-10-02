@@ -75,8 +75,8 @@ public class GatewayScriptModule extends AbstractScriptModule {
     protected boolean commitImpl(String projectName, String userName, List<String> changes, String message) {
         try (Git git = getGit(getProjectFolderPath(projectName))) {
             for (String change : changes) {
-                git.add().addFilepattern(change).call();
-                git.add().setUpdate(true).addFilepattern(change).call();
+                git.add().addFilepattern(change.replace("\\", "/")).call();
+                git.add().setUpdate(true).addFilepattern(change.replace("\\", "/")).call();
             }
 
             CommitCommand commit = git.commit().setMessage(message);
