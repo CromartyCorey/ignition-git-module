@@ -36,10 +36,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.axone_io.ignition.git.GatewayHook.context;
 
@@ -163,8 +160,9 @@ public class GitManager {
             if (hasActor(path)) {
                 String[] pathSplitted = update.split("/");
                 path = String.join("/", Arrays.copyOf(pathSplitted, pathSplitted.length - 1));
-
-                actor = getActor(projectName, path);
+                if (!Objects.equals(type, "Deleted")) {
+                    actor = getActor(projectName, path);
+                }
             }
 
             if((update.endsWith("resource.json") && countOccurrences(updates, path) < 2)
